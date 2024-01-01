@@ -1,0 +1,48 @@
+import { OrderType } from '../enums/OrderType';
+export declare class ExchangeInfoSymbolDto {
+    symbol: string;
+    status: string;
+    baseAsset: string;
+    baseAssetPrecision: number;
+    quoteAsset: string;
+    quotePrecision: number;
+    quoteAssetPrecision: number;
+    baseCommissionPrecision: number;
+    quoteCommissionPrecision: number;
+    orderTypes: Array<OrderType>;
+    icebergAllowed: boolean;
+    ocoAllowed: boolean;
+    quoteOrderQtyMarketAllowed: boolean;
+    allowTrailingStop: boolean;
+    cancelReplaceAllowed: boolean;
+    isSpotTradingAllowed: boolean;
+    isMarginTradingAllowed: boolean;
+    filters: Array<{
+        filterType: 'PRICE_FILTER' | 'LOT_SIZE' | 'ICEBERG_PARTS' | 'MARKET_LOT_SIZE' | 'TRAILING_DELTA' | 'PERCENT_PRICE_BY_SIDE' | 'NOTIONAL' | 'MAX_NUM_ORDERS' | 'MAX_NUM_ALGO_ORDERS';
+        minPrice: number;
+        maxPrice: number;
+        tickSize: number;
+        minQty: number;
+        maxQty: number;
+        limit: number;
+        stepSize: number;
+        minTrailingAboveDelta: number;
+        maxTrailingAboveDelta: number;
+        minTrailingBelowDelta: number;
+        maxTrailingBelowDelta: number;
+        bidMultiplierUp: number;
+        bidMultiplierDown: number;
+        askMultiplierUp: number;
+        askMultiplierDown: number;
+        avgPriceMins: number;
+        minNotional: number;
+        applyMinToMarket: true;
+        maxNotional: number;
+        applyMaxToMarket: false;
+        maxNumAlgoOrders: number;
+        maxNumOrders: number;
+    }>;
+    permissions: Array<string>;
+    defaultSelfTradePreventionMode: 'EXPIRE_MAKER';
+    allowedSelfTradePreventionModes: Array<'EXPIRE_TAKER' | 'EXPIRE_MAKER' | 'EXPIRE_BOTH'>;
+}

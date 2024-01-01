@@ -1,0 +1,42 @@
+import { StrategySubscriber } from '../../subscribers/strategy.subscriber';
+import { Strategy } from '../../entities/strategy.entity';
+import { BaseStrategyEnum } from '../../enums/baseStrategy.enum';
+import { Repository } from 'typeorm';
+import { WatcherService } from '../watcher.service';
+import { Interval } from '../../binance-api/enums/Interval';
+import { KlineWsDto } from '../../binance-api/dto/kline_ws.dto';
+import { Param } from '../../entities/param.entity';
+import { StrategyParam } from '../../entities/strategyParam.entity';
+import { Subscription } from '../../entities/subscription.entity';
+import { SubscriptionSubscriber } from '../../subscribers/subscription.subscriber';
+import { Cache } from 'cache-manager';
+import { TradeService } from '../trade.service';
+import { Order } from '../../entities/order.entity';
+export type RequiredParam = Array<{
+    name: string;
+    title: string;
+}>;
+export declare abstract class StrategyService {
+    protected subscriber: StrategySubscriber;
+    protected subscriptionSubscriber: SubscriptionSubscriber;
+    protected watcherService: WatcherService;
+    private paramRepository;
+    protected cacheManager: Cache;
+    private orderRepository;
+    private strategyRepository;
+    protected abstract readonly name: BaseStrategyEnum;
+    protected variations: Map<number, Strategy>;
+    protected subscriptions: Map<number, Subscription>;
+    protected abstract requiredParams: RequiredParam;
+    protected abstract clientRequiredParams: RequiredParam;
+    constructor(subscriber: StrategySubscriber, subscriptionSubscriber: SubscriptionSubscriber, watcherService: WatcherService, paramRepository: Repository<Param>, cacheManager: Cache, orderRepository: Repository<Order>, strategyRepository: Repository<Strategy>);
+    init(): Promise<void>;
+    private _checkParams;
+    protected afterLoadSubscription(entity: Subscription): void;
+    protected afterUpdateSubscription(entity: Subscription): void;
+    protected afterLoad(entity: Strategy): void;
+    protected getNewTradeService(subscription: Subscription): TradeService<unknown>;
+    protected afterUpdate(strategy: Strategy): void;
+    abstract trade(symbol: string, interval: Interval, klines: Map<number, KlineWsDto>): void;
+    protected getParams<T>(params: StrategyParam[]): T;
+}

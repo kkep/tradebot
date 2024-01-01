@@ -1,0 +1,31 @@
+import { Strategy } from "./entities/strategy.entity";
+import { Repository } from "typeorm";
+import { WatcherService } from "./services/watcher.service";
+import { BaseStrategyEnum } from "./enums/baseStrategy.enum";
+import { Param } from "./entities/param.entity";
+import { StrategyParam } from "./entities/strategyParam.entity";
+import { Client } from "./entities/client.entity";
+import { Subscription } from "./entities/subscription.entity";
+import { Cache } from "cache-manager";
+import { ClientParam } from "./entities/clientParam.entity";
+export declare class AppService {
+    private strategyRepository;
+    private strategyParamsRepository;
+    private clientParamsRepository;
+    private paramRepository;
+    private clientRepository;
+    private subscriptionRepository;
+    protected watcherService: WatcherService;
+    private cacheManager;
+    constructor(strategyRepository: Repository<Strategy>, strategyParamsRepository: Repository<StrategyParam>, clientParamsRepository: Repository<ClientParam>, paramRepository: Repository<Param>, clientRepository: Repository<Client>, subscriptionRepository: Repository<Subscription>, watcherService: WatcherService, cacheManager: Cache);
+    getHello(): string;
+    getBaseStrategyStrategyParams(baseStrategy: BaseStrategyEnum): Promise<Param[]>;
+    getBaseStrategyClientParams(baseStrategy: BaseStrategyEnum): Promise<Param[]>;
+    createStrategy(strategy: any): Promise<void>;
+    createClient(apiKey: string, apiSecret: string): Promise<Client>;
+    getStrategies(): Promise<Strategy[]>;
+    subscribeToStrategy(clientId: number, newSubscription: any): Promise<Subscription>;
+    stopStrategy(strategyId: number): Promise<boolean>;
+    startStrategy(strategyId: number): Promise<boolean>;
+    setStrategyState(strategyId: number, state: boolean): Promise<boolean>;
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"connector_client_error.js","sourceRoot":"","sources":["../../../../src/binance-api/errors/connector_client_error.ts"],"names":[],"mappings":";;AAAA,mCAA4B;AAE5B,MAAqB,oBAAqB,SAAQ,eAAK;IAGrD,YAAY,YAAoB;QAC9B,KAAK,CAAC,YAAY,CAAC,CAAC;QAHf,SAAI,GAAG,sBAAsB,CAAC;IAIrC,CAAC;CACF;AAND,uCAMC"}

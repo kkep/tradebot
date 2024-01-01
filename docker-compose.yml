@@ -1,0 +1,72 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    container_name: db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+      #- ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    networks:
+      - app-network
+
+  nodejs:
+    build:
+      #context: .
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: nodejs
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+#      NODE_ENV: production
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
+    depends_on:
+      - db
+    links:
+      - db
+    networks:
+      - app-network
+
+  webserver:
+    image: nginx
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - ./web-root:/usr/share/nginx/html
+      - ./nginx-conf/nginx.conf:/etc/nginx/nginx.conf
+      #- ./cert/private.key:/var/private.key
+      #- ./cert/full_chain.crt:/var/full_chain.crt
+      #- ./dhparam/dhparam-2048.pem:/etc/ssl/certs/dhparam-2048.pem
+    depends_on:
+      - nodejs
+    networks:
+      - app-network
+
+volumes:
+  db:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      #device: /usr/src/app/
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge
